@@ -6,34 +6,41 @@ class App extends Component {
 
 		this.state = { users: [], to: "", subject: "", message: "" };
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleMessageChange = this.handleMessageChange.bind(this);
-		this.handleSubjectChange = this.handleSubjectChange.bind(this);
-		this.handleToChange = this.handleToChange.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
+	/**
+	 * Post form data to cga-notifications-email module
+	 * @param {*} event 
+	 */
 	handleSubmit(event) {
 		event.preventDefault();
+		fetch("http://127.0.0.1:4125/v0/send", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ to: this.state.to, subject: this.state.subject, message: this.state.message })
+		})
 	}
 
-	handleMessageChange(event) {
+	/**
+	 * Map form event fields to state
+	 * @param {} event 
+	 */
+	handleChange(event) {
 		event.preventDefault();
-		this.setState({ message: event.target.value })
-	}
-
-	handleSubjectChange(event) {
-		event.preventDefault();
-		this.setState({ subject: event.target.value })
-	}
-
-	handleToChange(event) {
-		event.preventDefault();
-		this.setState({ to: event.target.value })
+		this.setState({ [event.target.name]: event.target.value });
 	}
 
 	async componentDidMount() {
 		this.setState({ users: await this.fetchUsers() });
 	}
 
+	/**
+	 * Fetch users from local CF instance /v2/api
+	 * @see https://apidocs.cloudfoundry.org/5.1.0/users/list_all_users.html
+	 */
 	fetchUsers() {
 		return fetch("http://127.0.0.1:4123/v0/cf/users", {
 			method: "GET",
@@ -46,40 +53,56 @@ class App extends Component {
 			});
 	}
 
+	/**
+	 * Filter and validate username entries in the form of email address
+	 * @param {Array} users - List of users fetched from CF endpoint
+	 */
+	filterUsers(users) {
+		return users.filter(item =>
+			item.user.username !== undefined
+		).filter(item =>
+			/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(item.user.username)
+		).map((ele, index) => {
+			return (
+				<option key={index} value={ele.user.username}>{ele.user.username}</option>);
+		})
+	}
+
 	render() {
 		return (
 			<main className="app">
 				<form onSubmit={this.handleSubmit}>
-					<label>To:</label>
-					<select
-						value={this.state.to}
-						onChange={this.state.handleToChange}
-					>
-						{this.state.users.map((ele, index) => (
-							<option key={index}>{ele.user.username}</option>
-						))}
-					</select>
-					<br />
-					<label>
-						Subject:
+					<fieldset>
+						<legend>Notify cloud users</legend>
+						<label>To:</label>
+						<select
+							name="to"
+							onChange={this.handleChange}
+							value={this.state.to}
+						>
+							{this.filterUsers(this.state.users)}
+						</select>
+						<br />
+						<label>
+							Subject:
 						<input
-							type="text"
-							value={this.state.subject}
-							onChange={this.handleSubjectChange}
-							name="subject"
-						/>
-					</label>
-					<br />
-					<label>
-						Message:
+								type="text"
+								onChange={this.handleChange}
+								name="subject"
+							/>
+						</label>
+						<br />
+						<label>
+							Message:
 						<textarea
-							type="text"
-							onChange={this.state.handleMessageChange}
-							name="message"
-						/>
-					</label>
-					<br />
-					<input type="submit" value="Submit" />
+								type="text"
+								onChange={this.handleChange}
+								name="message"
+							/>
+						</label>
+						<br />
+						<input type="submit" value="Submit" />
+					</fieldset>
 				</form>
 			</main>
 		);

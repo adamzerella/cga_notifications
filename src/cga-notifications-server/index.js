@@ -56,6 +56,10 @@ app.get("/v0/cf/users", (req, res) => {
 		});
 });
 
+//TODO Define additional routes
+app.get("/v0/cf/org", (req, res) => {});
+app.get("/v0/cf/spaces", (req, res) => {});
+
 app.listen(PORT, () =>
 	console.log(`Server listening at http://127.0.0.1:${PORT} ...`)
 );

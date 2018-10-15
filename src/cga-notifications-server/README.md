@@ -1,1 +1,1 @@
-# cga_notifications
+# cga-notifications-server

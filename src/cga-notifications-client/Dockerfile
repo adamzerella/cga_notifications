@@ -1,0 +1,4 @@
+FROM node:8.12.0
+
+EXPOSE 3000
+

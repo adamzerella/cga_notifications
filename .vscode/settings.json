@@ -1,0 +1,6 @@
+{
+    "editor.renderWhitespace": "all",
+    "editor.rulers": [
+        80
+    ]
+}

@@ -1,0 +1,68 @@
+version: 2
+jobs:
+  build-cga-notifications:
+    docker:
+      - image: circleci/node:8.12.0
+    working_directory: ~/cga_notifications
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install node modules
+          command: yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+            - src/cga-notifications-client/node_modules
+      - persist_to_workspace:
+          root: ~/cga_notifications
+          paths:
+            - node_modules
+            - src
+
+  test-cga-notifications-client:
+    docker:
+      - image: circleci/node:8.12.0
+    steps:
+      - attach_workspace:
+          at: ~/cga_notifications
+      - run:
+          name: Change DIR to src/cga_notifications-client
+          command: cd src/cga_notifications-client/
+
+  test-cga-notifications-server:
+    docker:
+      - image: circleci/node:8.12.0
+    steps:
+      - attach_workspace:
+          at: ~/cga_notifications
+      - run:
+          name: Change DIR to src/cga_notifications-server
+          command: cd src/cga_notifications-server/
+
+  test-cga-notifications-notify:
+    docker:
+      - image: circleci/node:8.12.0
+    steps:
+      - attach_workspace:
+          at: ~/cga_notifications
+      - run:
+          name: Change DIR to src/cga_notifications-notify
+          command: cd src/cga_notifications-notify/
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build-cga-notifications
+      - test-cga-notifications-client:
+          requires:
+                - build-cga-notifications
+      - test-cga-notifications-server:
+          requires:
+                - build-cga-notifications
+      - test-cga-notifications-notify:
+          requires:
+                - build-cga-notifications

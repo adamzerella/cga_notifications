@@ -29,8 +29,8 @@ jobs:
       - attach_workspace:
           at: ~/cga_notifications
       - run:
-          name: Change DIR to src/cga_notifications-client
-          command: cd src/cga_notifications-client/
+          name: Change DIR to src/cga-notifications-client
+          command: cd src/cga-notifications-client
 
   test-cga-notifications-server:
     docker:
@@ -39,8 +39,8 @@ jobs:
       - attach_workspace:
           at: ~/cga_notifications
       - run:
-          name: Change DIR to src/cga_notifications-server
-          command: cd src/cga_notifications-server/
+          name: Change DIR to src/cga-notifications-server
+          command: cd src/cga-notifications-server/
 
   test-cga-notifications-notify:
     docker:
@@ -49,8 +49,8 @@ jobs:
       - attach_workspace:
           at: ~/cga_notifications
       - run:
-          name: Change DIR to src/cga_notifications-notify
-          command: cd src/cga_notifications-notify/
+          name: Change DIR to src/cga-notifications-notify
+          command: cd src/cga-notifications-notify/
 
 workflows:
   version: 2

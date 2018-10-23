@@ -2,6 +2,8 @@
 
 POC web app to demonstrate basic functionality the `cloud.gov.au` team could use to notifiy its users.
 
+[![CircleCI](https://circleci.com/gh/govau/cga_notifications.svg?style=svg)](https://circleci.com/gh/govau/cga_notifications)
+
 ## Configuration:
 The following environment variables are required to be set when using certain modules:
 

@@ -21,6 +21,10 @@ export MAIL_PASS - Password use to auth with mail server
 # cga_notifications-notify
 export NOTIFY_API - notify.gov.au API token
 export NOTIFY_BASE - notify.gov.au API endpoint 
+
+# cga_notifications-github
+export GITHUB_TOKEN - api.github.com API token 
+
 ```
 
 ## Issues:

@@ -30,7 +30,7 @@ jobs:
           at: ~/cga_notifications
       - run:
           name: Change DIR to src/cga-notifications-client
-          command: cd src/cga-notifications-client
+          command: cd ~/cga_notifications/src/cga-notifications-client
 
   test-cga-notifications-server:
     docker:
@@ -40,7 +40,7 @@ jobs:
           at: ~/cga_notifications
       - run:
           name: Change DIR to src/cga-notifications-server
-          command: cd src/cga-notifications-server/
+          command: cd ~/cga_notifications/src/cga-notifications-server
 
   test-cga-notifications-notify:
     docker:
@@ -50,7 +50,7 @@ jobs:
           at: ~/cga_notifications
       - run:
           name: Change DIR to src/cga-notifications-notify
-          command: cd src/cga-notifications-notify/
+          command: cd ~/cga_notifications/src/cga-notifications-notify
 
 workflows:
   version: 2

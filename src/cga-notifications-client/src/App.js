@@ -4,23 +4,24 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { users: [], to: "", subject: "", message: "" };
+		this.state = { selectedTemplate: "", templates: [], users: [], to: "" };
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
 
 	/**
-	 * Post form data to cga-notifications-email module
+	 * Post form data to cga-notifications-notify module
 	 * @param {*} event 
 	 */
 	handleSubmit(event) {
 		event.preventDefault();
-		fetch("http://127.0.0.1:4125/v0/send", {
+
+		fetch("http://127.0.0.1:4130/v0/notify/send", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ to: this.state.to, subject: this.state.subject, message: this.state.message })
+			body: JSON.stringify({ to: this.state.to, templateId: this.state.selectedTemplate})
 		})
 	}
 
@@ -34,7 +35,7 @@ class App extends Component {
 	}
 
 	async componentDidMount() {
-		this.setState({ users: await this.fetchUsers() });
+		this.setState({ users: await this.fetchUsers(), templates: await this.fetchTemplates() });
 	}
 
 	/**
@@ -43,6 +44,21 @@ class App extends Component {
 	 */
 	fetchUsers() {
 		return fetch("http://127.0.0.1:4123/v0/cf/users", {
+			method: "GET",
+		})
+			.then(response => {
+				return response.json();
+			})
+			.catch(err => {
+				console.error(err);
+			});
+	}
+
+	/**
+	 * Fetch notify.gov.au email templates
+	 */
+	fetchTemplates() {
+		return fetch("http://127.0.0.1:4130/v0/notify/templates", {
 			method: "GET",
 		})
 			.then(response => {
@@ -68,6 +84,18 @@ class App extends Component {
 		})
 	}
 
+	/**
+	 * Render a list of email templates to <option> keys for a <select> element.
+	 * @param {Array} templates - 
+	 */
+	renderTemplates(templates) {
+		return templates.map( (item, index) => {
+			return (
+				<option key={index} value={item.id}>{item.name}</option>
+			);
+		});
+	}
+
 	render() {
 		return (
 			<main className="app">
@@ -84,21 +112,14 @@ class App extends Component {
 						</select>
 						<br />
 						<label>
-							Subject:
-						<input
-								type="text"
-								onChange={this.handleChange}
-								name="subject"
-							/>
-						</label>
-						<br />
-						<label>
-							Message:
-						<textarea
-								type="text"
-								onChange={this.handleChange}
-								name="message"
-							/>
+							Template:
+						<select
+							name="selectedTemplate"
+							onChange={this.handleChange}
+							value={this.state.selectedTemplate}
+						>
+							{this.renderTemplates(this.state.templates)}
+						</select>
 						</label>
 						<br />
 						<input type="submit" value="Submit" />

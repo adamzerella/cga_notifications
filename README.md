@@ -20,11 +20,10 @@ export MAIL_PASS - Password use to auth with mail server
 
 # cga_notifications-notify
 export NOTIFY_API - notify.gov.au API token
-export NOTIFY_BASE - notify.gov.au API endpoint 
+export NOTIFY_BASE - notify.gov.au API endpoint e.g "rest-api.notify.gov.au"
 
 # cga_notifications-github
 export GITHUB_TOKEN - api.github.com API token 
-
 ```
 
 ## Issues:
@@ -32,8 +31,5 @@ export GITHUB_TOKEN - api.github.com API token
 
 - Users should be grouped via `org`.
 
-- Nodemailer should be swapped for `govau/notifications-api`
-
-- No deployment configuration, basic auth 
 
 

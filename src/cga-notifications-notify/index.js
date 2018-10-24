@@ -23,6 +23,21 @@ app.post("/v0/notify/send", (req, res) => {
 	res.status(200).send().end();
 });
 
+app.post("/v0/notify/buildpack/send", (req, res) => {
+	notify.sendEmail(req.body.templateId, req.body.to, {
+		personalisation: {
+			organization: req.body.buildpack.organization,
+			space: req.body.buildpack.space,
+			application: req.body.buildpack.application,
+			buildpack: req.body.buildpack.buildpacks[0]
+		}
+	})
+		.then(response => console.log(`Sending email with templateId ${req.body.templateId} to: ${req.body.to}...`))
+		.catch(err => console.error(err));
+	
+	res.status(200).send().end();
+});
+
 app.get("/v0/notify/templates", async (req, res) => {
 	res.setHeader(
 		"Access-Control-Allow-Origin",

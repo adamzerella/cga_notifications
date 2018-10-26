@@ -37,38 +37,44 @@ class App extends Component {
 	}
 
 	/**
-	 * TODO Get users that match org/space for email
+	 * TODO Get users that match org/space for email and email
 	 * Email a static address with a static template to notify of an outdated buildpack.
 	 * @param { Object } event - Data from table <tr> { organization: "abc", ... }
 	 */
 	handleNotify(event) {
-		let result = [];
-		this.state.users.map(user => {
-			result.push({
-				user: user.username,
-				spaces: this.fetchUserSpaces(user.guid),
-			});
-		});
+		Promise.all(
+			this.state.users.map(async user => {
+				return {
+					user: user.username,
+					spaces: await this.fetchUserSpaces(user.guid),
+				};
+			})
+		).then(result => {
+			let emails = [];
 
-		result.map(user => {
-			Promise.resolve(user.spaces).then(val => {
-				val.filter(ele => {
-					return ele.name === event.space;
-				});
+			result.map(user => {
+				for (let i = 0; i < user.spaces.length; i++) {
+					if (user.spaces[i].name === event.space) {
+						emails.push(user.user);
+						console.log(`Emailing ${user.user} ...`);
+					}
+				}
 			});
-		});
 
-		// fetch("http://127.0.0.1:4130/v0/notify/buildpack/send", {
-		// 	method: "POST",
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 	},
-		// 	body: JSON.stringify({
-		// 		to: "<TODO>",
-		// 		templateId: "d5dfe505-fc99-44f8-b147-38b6c096313a",
-		// 		buildpack: event,
-		// 	}),
-		// });
+			// Call filterUsers(emails)...
+
+			// fetch("http://127.0.0.1:4130/v0/notify/buildpack/send", {
+			// 	method: "POST",
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 	},
+			// 	body: JSON.stringify({
+			// 		to: "<TODO>",
+			// 		templateId: "d5dfe505-fc99-44f8-b147-38b6c096313a",
+			// 		buildpack: event,
+			// 	}),
+			// });
+		});
 	}
 
 	/**
@@ -148,7 +154,7 @@ class App extends Component {
 			},
 			body: JSON.stringify({ userId: userId }),
 		})
-			.then(async response => {
+			.then(response => {
 				return response.json();
 			})
 			.catch(err => {
@@ -157,8 +163,24 @@ class App extends Component {
 	}
 
 	/**
+	 * Filter users state list for emails and render as <option/> keys
+	 * @param {Object} users
+	 */
+	renderOptionKeys(users) {
+		let items = this.filterUsers(users);
+
+		return items.map((ele, index) => {
+			return (
+				<option key={index} value={ele.user.username}>
+					{ele.user.username}
+				</option>
+			);
+		});
+	}
+
+	/**
 	 * Filter and validate username entries in the form of email address
-	 * @param {Array} users - List of users fetched from CF endpoint
+	 * @param {Object} users - List of users fetched from CF endpoint
 	 */
 	filterUsers(users) {
 		return users
@@ -167,14 +189,7 @@ class App extends Component {
 				/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
 					item.user.username
 				)
-			)
-			.map((ele, index) => {
-				return (
-					<option key={index} value={ele.user.username}>
-						{ele.user.username}
-					</option>
-				);
-			});
+			);
 	}
 
 	/**
@@ -237,7 +252,7 @@ class App extends Component {
 						onChange={this.handleChange}
 						value={this.state.to}
 					>
-						{this.filterUsers(this.state.users)}
+						{this.renderOptionKeys(this.state.users)}
 					</select>
 					<br />
 					<label>
@@ -254,6 +269,10 @@ class App extends Component {
 					<input type="submit" value="Submit" />
 				</form> */}
 				<h2>Outdated buildpacks</h2>
+				<p>
+					Given a list of outdated buildpacks, send emails to users
+					who are apart of the reported spaces.
+				</p>
 				{this.renderReportedBuildpacks(this.state.buildpacks)}
 			</main>
 		);

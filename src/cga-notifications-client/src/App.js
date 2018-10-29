@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import "./App.css";
+
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -56,24 +58,24 @@ class App extends Component {
 				for (let i = 0; i < user.spaces.length; i++) {
 					if (user.spaces[i].name === event.space) {
 						emails.push(user.user);
-						console.log(`Emailing ${user.user} ...`);
+						console.log(`Emailing ${user.user}`);
 					}
 				}
 			});
 
 			// Call filterUsers(emails)...
 
-			// fetch("http://127.0.0.1:4130/v0/notify/buildpack/send", {
-			// 	method: "POST",
-			// 	headers: {
-			// 		"Content-Type": "application/json",
-			// 	},
-			// 	body: JSON.stringify({
-			// 		to: "<TODO>",
-			// 		templateId: "d5dfe505-fc99-44f8-b147-38b6c096313a",
-			// 		buildpack: event,
-			// 	}),
-			// });
+			fetch("http://127.0.0.1:4130/v0/notify/buildpack/send", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					to: "adam.zerella@digital.gov.au",
+					templateId: "d5dfe505-fc99-44f8-b147-38b6c096313a",
+					buildpack: event,
+				}),
+			});
 		});
 	}
 
@@ -214,7 +216,7 @@ class App extends Component {
 
 	renderReportedBuildpacks(buildpack) {
 		return (
-			<table>
+			<table className="buildpacks">
 				<tbody>
 					<tr>
 						<th>Organization</th>

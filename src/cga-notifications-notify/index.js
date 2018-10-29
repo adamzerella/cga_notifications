@@ -7,7 +7,7 @@ const govau_notify = require('notifications-node-client').NotifyClient;
 const app = express();
 app.use(helmet());
 app.use(cors());
-app.use(bodyParser());
+app.use(bodyParser.json());
 
 const PORT = 4130;
 const NOTIFY_API = process.env.NOTIFY_API;

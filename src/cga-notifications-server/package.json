@@ -10,6 +10,7 @@
     "helmet": "^3.14.0"
   },
   "scripts": {
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "buildpacks": "cfy report-buildpacks -output-json > static/report-buildpacks.json"
   }
 }

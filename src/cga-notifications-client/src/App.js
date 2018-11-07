@@ -214,7 +214,7 @@ class App extends Component {
 		);
 	}
 
-	renderReportedBuildpacks(buildpack) {
+	renderReportedBuildpacks(buildpacks) {
 		return (
 			<table className="buildpacks">
 				<tbody>
@@ -223,8 +223,10 @@ class App extends Component {
 						<th>Space</th>
 						<th>App</th>
 						<th>Buildpack</th>
+						<th>Latest Buildpack</th>
+						<th>Latested Deployment</th>
 					</tr>
-					{buildpack
+					{buildpacks
 						.filter(item => {
 							return item.messages[0] === "needs attention (5)";
 						})
@@ -235,6 +237,8 @@ class App extends Component {
 									<td>{item.space}</td>
 									<td>{item.application}</td>
 									<td>{item.buildpacks}</td>
+									<td>TODO</td>
+									<td>{new Date().toDateString()}</td>
 									<td>{this.renderNotifyButton(item)}</td>
 								</tr>
 							);

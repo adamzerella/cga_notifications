@@ -1,5 +1,5 @@
 {
-  "name": "cga-notifications-server",
+  "name": "cga-notifications-auth",
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,10 +7,12 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.4",
-    "helmet": "^3.14.0"
+    "helmet": "^3.14.0",
+    "passport": "^0.4.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-openid": "^0.4.0"
   },
   "scripts": {
-    "dev": "node index.js",
-    "buildpacks": "cfy report-buildpacks -output-json > static/report-buildpacks.json"
+    "dev": "node index.js"
   }
 }

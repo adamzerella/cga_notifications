@@ -8,22 +8,28 @@ POC web app to demonstrate basic functionality the `cloud.gov.au` team could use
 The following environment variables are required to be set when using certain modules:
 
 ```bash
-# cga_notifications-server
+# cga-notifications-server
 export CF_ENV - Local cloud environment e.g "y"
 export CF_TOKEN - Local cloud user token to authenticate with CF api.
 export CF_HOST - Local CF hostname e.g "api.system.y.cld.gov.au"
 
-# cga_notifications-email ( Deprecated )
+# cga-notifications-email ( Deprecated )
 export MAIL_HOST - Mail server hostname e.g "smtp.mailgun.com"
 export MAIL_USER - Username use to auth with mail server
 export MAIL_PASS - Password use to auth with mail server
 
-# cga_notifications-notify
+# cga-notifications-notify
 export NOTIFY_API - notify.gov.au API token
 export NOTIFY_BASE - notify.gov.au API endpoint e.g "rest-api.notify.gov.au"
 
-# cga_notifications-github
+# cga-notifications-github
 export GITHUB_TOKEN - api.github.com API token 
+
+# cga-notifications-auth
+export CF_CLIENT_ID - CF client Id used to make requests to the API
+export CF_CLIENT_SECRET - CF client secret
+export GOOGLE_CLIENT_ID - Google OAuth client Id
+export GOOGLE_CLIENT_SECRET - Google OAuth client secret
 ```
 
 ## Issues:

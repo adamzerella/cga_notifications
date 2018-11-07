@@ -28,14 +28,7 @@ export GITHUB_TOKEN - api.github.com API token
 # cga-notifications-auth
 export CF_CLIENT_ID - CF client Id used to make requests to the API
 export CF_CLIENT_SECRET - CF client secret
-export GOOGLE_CLIENT_ID - Google OAuth client Id
-export GOOGLE_CLIENT_SECRET - Google OAuth client secret
 ```
-
-## Issues:
-- Authentication is _currently_ done with `CF_TOKEN`, this is a temporary token generated from `cf oauth-token` after authentication with a local CF environment. This token can be publically viewed and abused.
-
-- Users should be grouped via `org`.
 
 
 
